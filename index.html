@@ -5,28 +5,37 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Responsive navbar with no js</title>
-	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="./dist/main.css">
 </head>
 <body>
 <div class="container">
-	<h1>To Do List</h1>
-	<div class="input-group">
-		<input type="text" class="form-control task" placeholder="Write task">
-		<div class="input-group-append">
-			<button class="btn btn-outline-primary add" type="button">Add Task</button>
-			<button class="btn btn-outline-success save" type="button">Save list</button>
-			<button class="btn btn-outline-warning get" type="button">Get list</button>
+	<div class="row">
+		<div class="col-12 col-lg-10 mx-auto">
+			<h1>To Do List</h1>
+			<div class="input-group">
+				<label for="task" class="sr-only"></label>
+				<input type="text" id="task" class="form-control task" placeholder="Write task">
+				<div class="input-group-append">
+					<button class="btn btn-outline-primary add" type="button">Add Task</button>
+					<button class="btn btn-outline-success save" type="button">Save list</button>
+					<button class="btn btn-outline-warning get" type="button">Get list</button>
+				</div>
+			</div>
+			<div class="list">
+				<ul class="list-group">
+					<li class="list-group-item"><span>Item 1</span>
+						<button type="button" class="btn btn-danger remove">&minus;</button>
+					</li>
+					<li class="list-group-item"><span>Item 2</span>
+						<button type="button" class="btn btn-danger remove">&minus;</button>
+					</li>
+				</ul>
+			</div>
+			<div class="notices"></div>
 		</div>
 	</div>
-	<div class="list">
-		<ul class="list-group">
-			<li class="list-group-item"><span>Item 1</span> <button type="button" class="btn btn-danger remove">-</button></li>
-			<li class="list-group-item"><span>Item 2</span> <button type="button" class="btn btn-danger remove">-</button></li>
-		</ul>
-	</div>
-	<div class="notices"></div>
 </div>
 
-<script src="main.js" defer></script>
+<script src="./dist/main.js" defer></script>
 </body>
 </html>

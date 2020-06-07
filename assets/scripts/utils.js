@@ -42,8 +42,27 @@ function createElement( element, el_class, el_value ) {
 	return new_element;
 }
 
+async function saveToDoList( list_name, list ) {
+	const list_values = Array.from( list.children ).forEach( item => {
+		return item.firstChild.textContent;
+	} );
+	const promise     = new Promise( ( res, rej ) => {
+		fetch( '../fileControl.php', {
+			method:  'POST',
+			headers: {
+				'Accept':       'application/json',
+				'Content-Type': 'application/json'
+			},
+			body:    JSON.stringify( list_values )
+		} );
+	} );
+
+	return await promise;
+}
+
 export {
 	removeItem,
 	addListItem,
 	createElement,
+	saveToDoList,
 };

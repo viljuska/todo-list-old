@@ -1,102 +1,135 @@
-const path                    = require( 'path' );
-const MiniCssExtractPlugin    = require( 'mini-css-extract-plugin' );
-const OptimizeCssAssetsPlugin = require( 'optimize-css-assets-webpack-plugin' );
-const TerserPlugin            = require( 'terser-webpack-plugin' );
-const { CleanWebpackPlugin }  = require( 'clean-webpack-plugin' );
-// const HtmlWebpackPlugin       = require( 'html-webpack-plugin' );
+const path                 = require( 'path' ),
+      isProduction         = process.env.NODE_ENV === 'production', // true | false,
+      MiniCssExtractPlugin = require( 'mini-css-extract-plugin' ),
+      // CopyWebpackPlugin    = require( 'copy-webpack-plugin' ),
+      rootPath             = process.cwd(),
+      paths                = {
+	      root:       rootPath,
+	      assets:     path.join( rootPath, 'assets' ),
+	      dist:       path.join( rootPath, 'dist' ),
+	      publicPath: '/',
+	      entry:      {
+		      'main': [
+			      './scripts/main.js',
+			      './styles/main.scss'
+		      ]
+	      }
+      },
+      webpack              = require( 'webpack' );
 
-module.exports = {
-	entry:        {
-		main: './assets/index.js',
-	},
-	output:       {
-		filename: '[name].js',
-		path:     path.resolve( __dirname, 'dist' )
-	},
-	optimization: {
-		minimizer:   [
-			new OptimizeCssAssetsPlugin(),
-			new TerserPlugin(),
-		],
-		splitChunks: {
-			chunks:      'all',
-			minSize:     0,
-			cacheGroups: {
-				vendors: {
-					test:     /[\\/]node_modules[\\/]/,
-					priority: -10
+module.exports = ( env, arg ) => {
+	return {
+		mode: process.env.NODE_ENV || 'development',
+
+		optimization: {
+			chunkIds: 'natural'
+		},
+
+		stats: {
+			hash:         false,
+			version:      false,
+			timings:      true,
+			children:     false,
+			errors:       true,
+			errorDetails: true,
+			errorStack:   false,
+			warnings:     false,
+			chunks:       false,
+			modules:      false,
+			reasons:      false,
+			source:       false,
+			publicPath:   false,
+			assets:       true,
+			assetsSort:   '!size',
+			logging:      'none', // false | error | warn | info | verbose | true
+			loggingTrace: true,
+		},
+
+		resolve: {
+			symlinks: false,
+			modules:  [ 'node_modules' ]
+		},
+
+		entry: paths.entry,
+
+		context: paths.assets,
+
+		output: {
+			filename: 'scripts/[name].js',
+			path:     paths.dist,
+			// publicPath: `${ paths.publicPath }/${ path.basename( paths.dist ) }/`,
+			publicPath:          'auto',
+			assetModuleFilename: '[path][name][ext]',
+			clean:               true,
+			pathinfo:            false
+		},
+
+		module: {
+			rules: [
+				{
+					test:    /\.js$/i,
+					exclude: /node_modules/,
+					use:     [ 'babel-loader' ]
 				},
-				default: {
-					minChunks:          2,
-					priority:           -20,
-					reuseExistingChunk: true
-				}
-			}
-		}
-	},
-	module:       {
-		rules: [
-			{
-				test:    /\.js$/,
-				exclude: /(node_modules)/,
-				use:     {
-					loader:  'babel-loader',
-					options: {
-						presets: [ '@babel/preset-env' ]
+				{
+					test: /\.(s[ac]|c)ss$/i,
+					use:  [
+						MiniCssExtractPlugin.loader,
+						'css-loader',
+						'postcss-loader',
+						'sass-loader'
+					]
+				},
+				{
+					test:   /\.(png|svg|jpe?g|gif|webp)$/i,
+					type:   'asset',
+					parser: {
+						dataUrlCondition: {
+							maxSize: 10 * 1024 // Default 8kb, set to 10kb
+						}
 					}
+				},
+				{
+					test: /\.(woff2?|eot|ttf|otf)$/i,
+					type: 'asset'
 				}
-			},
-			{
-				test: /\.scss$/,
-				use:  [
-					MiniCssExtractPlugin.loader,
-					'css-loader',
-					'sass-loader'
-				]
-			},
-			{
-				test: /\.(png|jpe?g|gif|svg)$/,
-				use:  [
-					{
-						// Using file-loader for these files
-						loader: 'file-loader',
+			]
+		},
 
-						// In options we can set different things like format
-						// and directory to save
-						options: {
-							outputPath: 'images'
-						}
-					},
-				],
-			},
-			{
-				// Apply rule for fonts files
-				test: /\.(woff|woff2|ttf|otf|eot)$/,
-				use:  [
-					{
-						// Using file-loader too
-						loader:  'file-loader',
-						options: {
-							outputPath: 'fonts'
-						}
-					}
-				]
-			}
-		]
-	},
-	stats:        {
-		colors: true
-	},
-	devtool:      'source-map',
-	plugins:      [
-		new MiniCssExtractPlugin( {
-			                          filename: '[name].css'
-		                          } ),
-		new CleanWebpackPlugin(),
-		// new HtmlWebpackPlugin( {
-		// 	                       filename: 'index.html',
-		// 	                       template: './index.html',
-		// 	                       chunks:   [ 'main' ]
-		//                        } ),
-	]
+		target: 'browserslist',
+
+		plugins: [
+			new MiniCssExtractPlugin( {
+				filename: 'styles/[name].css'
+			} ),
+			// new CopyWebpackPlugin( {
+			// 	                       patterns: [
+			// 		                       {
+			// 			                       from:             './images/**/*',
+			// 			                       to:               '[path][name][ext]',
+			// 			                       noErrorOnMissing: true
+			// 		                       }
+			// 	                       ]
+			//                        } ),
+			// Autoload required files
+			new webpack.ProvidePlugin( {
+				regeneratorRuntime: 'regenerator-runtime', // Necessary for using dynamic imports with Babel
+			} ),
+			new webpack.ProgressPlugin( {
+				handler:           ( percentage, message, ...args ) => {
+					console.info( `${ Math.floor( percentage * 100 ) }% - ${ message } | `, ...args );
+				},
+				activeModules:     false,
+				entries:           false,
+				modules:           true,
+				modulesCount:      5000,
+				profile:           true,
+				dependencies:      true,
+				dependenciesCount: 10000,
+				percentBy:         'entries',
+			} ),
+		],
+
+		devtool: !isProduction ? 'source-map' : false,
+	};
 };

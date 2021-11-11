@@ -1,35 +1,51 @@
 {
- "name": "music-player",
- "version": "1.0.0",
- "repository": "https://github.com/viljuska/Music-player",
- "author": "Stefan <stefan_jocic@avokado.rs>",
- "license": "MIT",
- "scripts": {
-  "start": "webpack-dev-server --config webpack.config.js --mode development --open",
-  "build": "webpack --config webpack.config.js --mode development",
-  "build:production": "webpack --config webpack.config.js --mode production"
- },
- "dependencies": {
-  "bootstrap": "^4.5.0"
- },
- "devDependencies": {
-  "@babel/core": "^7.10.2",
-  "@babel/preset-env": "^7.10.2",
-  "babel-loader": "^8.1.0",
-  "clean-webpack-plugin": "^3.0.0",
-  "css-loader": "^3.4.2",
-  "file-loader": "^6.0.0",
-  "html-webpack-plugin": "^4.3.0",
-  "jquery": "^3.4.1",
-  "mini-css-extract-plugin": "^0.9.0",
-  "node-sass": "^4.13.1",
-  "optimize-css-assets-webpack-plugin": "^5.0.3",
-  "popper.js": "^1.16.1",
-  "sass-loader": "^8.0.2",
-  "style-loader": "^1.1.3",
-  "terser-webpack-plugin": "^2.3.5",
-  "webpack": "^4.42.0",
-  "webpack-cli": "^3.3.11",
-  "webpack-dev-server": "^3.10.3"
- }
+	"name": "todo-list",
+	"version": "1.0.0",
+	"description": "",
+	"private": true,
+	"scripts": {
+		"build": "cross-env webpack --config webpack.config.js",
+		"build:production": "cross-env NODE_ENV=production webpack --config webpack.config.js",
+		"watch": "cross-env webpack --watch --config webpack.config.js",
+		"update-browsers-list": "npx browserslist@latest --update-db",
+		"zip": "bestzip todo-list.zip ../todo-list/dist ../todo-list/*.html",
+		"refresh": "rm -rf node_modules && npm install"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/viljuska/todo-list.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "GPL-2.0-or-later",
+	"bugs": {
+		"url": "https://github.com/viljuska/todo-list/issues"
+	},
+	"homepage": "https://github.com/viljuska/todo-list#readme",
+	"devDependencies": {
+		"@babel/core": "^7.14.8",
+		"@babel/plugin-syntax-dynamic-import": "^7.8.3",
+		"@babel/preset-env": "^7.14.9",
+		"@babel/preset-react": "^7.14.5",
+		"autoprefixer": "^10.3.1",
+		"babel-loader": "^8.2.2",
+		"bestzip": "^2.2.0",
+		"copy-webpack-plugin": "^9.0.1",
+		"cross-env": "^7.0.3",
+		"css-loader": "^5.2.7",
+		"mini-css-extract-plugin": "^1.6.2",
+		"postcss": "^8.3.6",
+		"postcss-loader": "^5.3.0",
+		"postcss-preset-env": "^6.7.0",
+		"sass": "^1.37.2",
+		"sass-loader": "^11.1.1",
+		"style-loader": "^2.0.0",
+		"webpack": "^5.48.0",
+		"webpack-cli": "^4.7.2"
+	},
+	"dependencies": {
+		"@popperjs/core": "^2.9.2",
+		"bootstrap": "^5.1.3",
+		"regenerator-runtime": "^0.13.9"
+	}
 }

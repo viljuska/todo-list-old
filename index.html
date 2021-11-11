@@ -1,36 +1,41 @@
 <!doctype html>
-<html lang="en-US">
+<html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Responsive navbar with no js</title>
-	<link rel="stylesheet" href="./dist/main.css">
+	<title>To do app</title>
+
+	<link rel="stylesheet" href="/dist/styles/main.css">
 </head>
 <body>
-<div class="container">
-	<div class="row">
-		<div class="col-12 col-lg-10 mx-auto">
-			<a href="fileControl.php">File Control</a>
-			<h1 contenteditable="true">To Do List</h1>
-			<div class="input-group">
-				<label for="task" class="sr-only"></label>
-				<input type="text" id="task" class="form-control task" placeholder="Write task">
-				<div class="input-group-append">
-					<button class="btn btn-outline-primary add" type="button">Add Task</button>
-					<button class="btn btn-outline-success save" type="button">Save list</button>
-					<button class="btn btn-outline-warning get" type="button">Get list</button>
+<main id="main">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-lg-6 mx-auto">
+				<h1>Todo App</h1>
+				<div class="form-group form-group--add-list">
+					<label for="new-item" class="sr-only">Add new item</label>
+					<input type="text" class="form-control" id="new-item" placeholder="Add new item">
+					<button type="button" class="btn btn--primary btn--add">
+						Add
+					</button>
+				</div>
+				<div class="todo-list">
+					<div class="list__item">
+						<label class="list-status">
+							<input type="checkbox">
+						</label>
+						<input type="text" value="Buy a coffee" readonly>
+						<button type="button" class="btn btn-danger btn--remove">
+							Remove
+						</button>
+					</div>
 				</div>
 			</div>
-			<div class="list">
-				<ul class="list-group tasks"></ul>
-			</div>
-			<div class="notices"></div>
 		</div>
 	</div>
-</div>
-
-<!--<script src="./dist/main.js" defer></script>-->
-<script src="./assets/scripts/main.js" defer></script>
+</main>
+<script defer src="/dist/scripts/main.js"></script>
 </body>
 </html>
